@@ -1,0 +1,27 @@
+Plot4<-function()
+{
+    closeAllConnections()
+    library(sqldf)
+    DS<-read.csv.sql("file:///C:/Users/svkabra/Desktop/Coursera Study/household_power_consumption.txt", sep=";", sql = "select * from file where Date='1/2/2007' or Date= '2/2/2007'")
+    plotter<-function()
+    {
+       plot.new()
+       par(mfrow=c(2,2))
+       plot(DS$Global_active_power, type="l", xaxt ="n", xlab = "", ylab="Global Active Power(kilowatts)")
+       axis(1, at=c(0,1500,2880), labels = c("Thu","Fri","Sat"))
+       plot(DS$Voltage, type="l", xaxt ="n", xlab = "datetime", ylab="voltage")
+       axis(1, at=c(0,1500,2880), labels = c("Thu","Fri","Sat"))
+       plot(DS$Sub_metering_1, type="l",  xaxt ="n", xlab = "", ylab="Energy sub metering")
+       axis(1, at=c(0,1500,2880), labels = c("Thu","Fri","Sat"))
+       lines(DS$Sub_metering_2, col="red")
+       lines(DS$Sub_metering_3, col="blue")
+       legend("topright",legend =  c("sub_metering_1","sub_metering_2","sub_metering_3"), col=c("black", "red","blue"), lty= c(1,1,1), bty="n")
+       plot(DS$Global_reactive_power, type="l", xaxt ="n", xlab = "datetime", ylab="Global_reactive_power")
+       axis(1, at=c(0,1500,2880), labels = c("Thu","Fri","Sat"))
+    }
+    plotter()
+    png(filename = "plot4.png", width = 480, height= 480, units = "px")
+    plotter()
+    dev.off()
+    closeAllConnections()
+}
